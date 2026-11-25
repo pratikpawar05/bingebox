@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: encoding-service
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    consumer:
+      group-id: encoding-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+            use:
+              type:
+                headers: false
+            value:
+              default:
+                type: com.bingebox.encodingservice.event.VideoUploadedEvent
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.JsonSerializer
+
+server:
+  port:
+    8083
+
+minio:
+  access-key: ${MINIO_ACCESS_KEY:}
+  secret-key: ${MINIO_SECRET_KEY:}
+  region: ${MINIO_REGION:}
+  bucket-name: bingebox
+
+#FFmpeg configuration
+ffmpeg:
+  path: ${FFMPEG_PATH:ffmpeg}
+
+#Temp directory for encoding
+encoding:
+  base-path: ${TEMP_DIR:/tmp/encoding}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

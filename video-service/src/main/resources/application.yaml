@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: video-service
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.JsonSerializer
+    servlet:
+      multipart:
+        max-file-size: 2GB
+        max-request-size: 2GB
+
+
+server:
+  port: 8082
+
+minio:
+  access-key: ${MINIO_ACCESS_KEY:}
+  secret-key: ${MINIO_SECRET_KEY:}
+  region: ${MINIO_REGION:}
+  bucket-name: bingebox
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
